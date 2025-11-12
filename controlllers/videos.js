@@ -4,9 +4,9 @@ const getVideoById = async (req, res) => {
   try {
     if (!req.query.Id) {
       return res
-        .status(500)
+        .status(400)
         .send({
-          statusCode: "500",
+          statusCode: "400",
           statusMessage: "Please enter Video Id",
           doc: null,
         });
@@ -16,7 +16,6 @@ const getVideoById = async (req, res) => {
         Id: req.query.Id,
       },
     });
-    console.log("video---", video)
     if (video) {
       return res
         .status(200)

@@ -48,4 +48,8 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 db.users = require("./users")(sequelize,Sequelize);
 db.videos = require("./videos")(sequelize, Sequelize);
+db.userVideos = require("./userVideos")(sequelize, Sequelize);
+
+db.users.belongsToMany(db.videos,{through: db.userVideos, foreignKey: "userId"})
+db.videos.belongsToMany(db.users,{through: db.userVideos, foreignKey: "videoId"})
 module.exports = db;
