@@ -1,5 +1,15 @@
 const { Op } = require("sequelize");
 const db = require("../models");
+const data = [
+  {
+    range: "2-5",
+    stars: 10,
+  },
+  {
+    range: "5-7",
+    stars: 5,
+  },
+];
 
 const REWARD = 20;
 const submitVideo = async (req, res) => {
@@ -51,10 +61,23 @@ const submitVideo = async (req, res) => {
       },
     });
     let starsToAdd = 0;
-    if (totalVideos < 2) starsToAdd = 20;
-    else if (totalVideos < 7) starsToAdd = 10;
-    else if (totalVideos < 10) starsToAdd = 1;
-    else starsToAdd = 0;
+    //this was the condition that was given towards the end to make it dynamic.
+    //start
+    for (let d of data) {
+      let videoRange = d?.range.split("-");
+      let stars = d?.stars;
+      if (
+        totalVideos > parseInt(videoRange[0]) &&
+        totalVideos < parseInt(videoRange[1])
+      ) {
+        starsToAdd = stars;
+      } else starsToAdd = 0;
+    }
+    //end
+    // if (totalVideos < 2) starsToAdd = 20;
+    // else if (totalVideos < 7) starsToAdd = 10;
+    // else if (totalVideos < 10) starsToAdd = 1;
+    // else starsToAdd = 0;
     await db.userVideos.create({ userId: user.Id, videoId });
     await user.increment("star", { by: starsToAdd });
     let totalStars = user.star + starsToAdd;
@@ -120,6 +143,3 @@ const leaderBoard = async (req, res) => {
 };
 
 module.exports = { submitVideo, leaderBoard };
-
-//same day rewatch no stars
-//first 2 20 start, next 5 10 stars and next 3 1 star after that no stars in a day
