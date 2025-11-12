@@ -14,13 +14,13 @@ module.exports = (sequelize, DataTypes) => {
       },
       userId: {
         type: DataTypes.INTEGER,
-        // references: { model: "users", key: "Id" },
-        // onDelete: "CASCADE",
+        references: { model: "users", key: "Id" },
+        onDelete: "CASCADE",
       },
       videoId: {
         type: DataTypes.INTEGER,
-        // references: { model: "videos", key: "Id" },
-        // onDelete: "CASCADE",
+        references: { model: "videos", key: "Id" },
+        onDelete: "CASCADE",
       },
       watchedAt: { type: DataTypes.DATE, defaultValue: Date.now() },
       createdAt: DataTypes.DATE,

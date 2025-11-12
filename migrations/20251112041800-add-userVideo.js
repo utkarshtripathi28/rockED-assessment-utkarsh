@@ -12,13 +12,9 @@ module.exports = {
       },
       userId: {
         type: Sequelize.INTEGER,
-        references: { model: "users", key: "Id" },
-        onDelete: "CASCADE",
       },
       videoId: {
         type: Sequelize.INTEGER,
-        references: { model: "videos", key: "Id" },
-        onDelete: "CASCADE",
       },
       watchedAt: { type: Sequelize.DATE, defaultValue: Sequelize.fn("NOW") },
       createdAt: Sequelize.DATE,
