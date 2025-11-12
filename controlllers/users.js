@@ -3,7 +3,7 @@ const db = require("../models");
 const REWARD = 20;
 const submitVideo = async (req, res) => {
   try {
-    const email = req.headers['x-user-email'];
+    const email = req.headers["x-user-email"];
     const { videoId } = req.body;
     if (!email || !videoId) {
       return res.status(400).send({
@@ -43,25 +43,33 @@ const submitVideo = async (req, res) => {
 
 const leaderBoard = async (req, res) => {
   try {
-    let users = await db.users.findAll({
-      attributes: ["name", "email", "star"],
+    const { page = 1, limit = 10, name, gender, department } = req.query;
+    const offset = (page - 1) * limit;
+    let where = {};
+    if (name) Object.assign(where, { name });
+    if (gender) Object.assign(where, { gender });
+    if (department) Object.assign(where, { department });
+    let {count, rows} = await db.users.findAndCountAll({
+      offset,limit,where,
       order: [
         ["star", "DESC"],
         ["Id", "ASC"],
       ],
     });
-    if (!users.length > 0) {
+    if (!rows.length > 0) {
       return res.status(400).send({
         statusCode: "400",
         statusMessage: "No user data found",
         doc: null,
       });
     }
-    const leaderBoard = users.map((u, i) => ({
-      rank: i + 1,
+    const leaderBoard = rows.map((u, i) => ({
+      rank: offset + i + 1,
       name: u.name,
       email: u.email,
       star: u.star,
+      department: u.department,
+      gender: u.gender,
     }));
     return res.status(200).send({
       statusCode: "200",

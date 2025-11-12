@@ -14,7 +14,7 @@ app.get("/heartbeat", (req, res) => {
 // app.use("/rocked/v1/videos", routers.videos);
 const HOST = process.env.HOST;
 const PORT = process.env.PORT;
-app. get("/rocked/v1/users/leaderBoard", users.leaderBoard);
+app.get("/rocked/v1/users/leaderBoard", users.leaderBoard);
 app.get("/rocked/v1/videos/getVideoById", videos.getVideoById);
 app.post("/rocked/v1/users/submitVideo", users.submitVideo);
 app.listen(PORT, HOST, () => {
