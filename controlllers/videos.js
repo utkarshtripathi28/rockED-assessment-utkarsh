@@ -1,0 +1,35 @@
+let db = require("../models");
+
+const getVideoById = async (req, res) => {
+  try {
+    if (!req.query.Id) {
+      return res
+        .status(500)
+        .send({
+          statusCode: "500",
+          statusMessage: "Please enter Video Id",
+          doc: null,
+        });
+    }
+    let video = await db.videos.findOne({
+      where: {
+        Id: req.query.Id,
+      },
+    });
+    console.log("video---", video)
+    if (video) {
+      return res
+        .status(200)
+        .send({ statusCode: "200", statusMessage: "Data found", doc: video });
+    }
+    return res
+      .status(204)
+      .send({ statusCode: "204", statusMessage: "No data found", doc: null });
+  } catch (error) {
+    return res
+      .status(500)
+      .send({ statusCode: "500", statusMessage: "Server Error", doc: null });
+  }
+};
+
+module.exports = { getVideoById };
