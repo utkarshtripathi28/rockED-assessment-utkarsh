@@ -37,15 +37,27 @@ const submitVideo = async (req, res) => {
       },
     });
     if (userVideoWatched) {
+      await db.userVideos.create({ userId: user.Id, videoId });
       return res.status(400).send({
         statusCode: "400",
         statusMessage: "No points for same day rewatch",
         doc: null,
       });
     }
+    const totalVideos = await db.userVideos.count({
+      where: {
+        userId: user.Id,
+        watchedAt: { [Op.between]: [todayStart, todayEnd] },
+      },
+    });
+    let starsToAdd = 0;
+    if (totalVideos < 2) starsToAdd = 20;
+    else if (totalVideos < 7) starsToAdd = 10;
+    else if (totalVideos < 10) starsToAdd = 1;
+    else starsToAdd = 0;
     await db.userVideos.create({ userId: user.Id, videoId });
-    await user.increment("star", { by: REWARD });
-    let totalStars = user.star + REWARD;
+    await user.increment("star", { by: starsToAdd });
+    let totalStars = user.star + starsToAdd;
     return res.status(200).send({
       statusCode: "200",
       statusMessage: "Video watched and entry recorded",
