@@ -3,7 +3,7 @@ const db = require("../models");
 const REWARD = 20;
 const submitVideo = async (req, res) => {
   try {
-    const email = req.headers.x - user - email;
+    const email = req.headers['x-user-email'];
     const { videoId } = req.body;
     if (!email || !videoId) {
       return res.status(400).send({
@@ -36,7 +36,7 @@ const submitVideo = async (req, res) => {
     return res.status(500).send({
       statusCode: "500",
       statusMessage: "Server Error",
-      doc: null,
+      doc: error,
     });
   }
 };
@@ -72,9 +72,9 @@ const leaderBoard = async (req, res) => {
     return res.status(500).send({
       statusCode: "500",
       statusMessage: "Server Error",
-      doc: null,
+      doc: error,
     });
   }
 };
 
-module.exports = { submitVideo };
+module.exports = { submitVideo, leaderBoard };

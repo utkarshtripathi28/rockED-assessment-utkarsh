@@ -1,7 +1,8 @@
 let routes = require("express").Router();
-let videos = require("../controlllers/videos")
+let users = require("../controlllers/users")
 
-// routes.get("getVideoById", videos.getVideoById);
+routes.get("leaderboard", users.leaderBoard);
+routes.get("leaderboard", users.leaderBoard);
 
 
 module.exports = routes

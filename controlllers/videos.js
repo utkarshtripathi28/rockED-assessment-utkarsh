@@ -27,7 +27,7 @@ const getVideoById = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .send({ statusCode: "500", statusMessage: "Server Error", doc: null });
+      .send({ statusCode: "500", statusMessage: "Server Error", doc: error });
   }
 };
 
