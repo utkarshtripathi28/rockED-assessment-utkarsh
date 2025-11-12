@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const db = require("../models");
 
 const REWARD = 20;
@@ -24,6 +25,24 @@ const submitVideo = async (req, res) => {
         doc: null,
       });
     }
+    let todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+    let todayEnd = new Date();
+    todayEnd.setHours(23, 59, 59, 999);
+    let userVideoWatched = await db.userVideos.findOne({
+      where: {
+        userId: user.Id,
+        videoId,
+        watchedAt: { [Op.between]: [todayStart, todayEnd] },
+      },
+    });
+    if (userVideoWatched) {
+      return res.status(400).send({
+        statusCode: "400",
+        statusMessage: "No points for same day rewatch",
+        doc: null,
+      });
+    }
     await db.userVideos.create({ userId: user.Id, videoId });
     await user.increment("star", { by: REWARD });
     let totalStars = user.star + REWARD;
@@ -43,14 +62,17 @@ const submitVideo = async (req, res) => {
 
 const leaderBoard = async (req, res) => {
   try {
-    const { page = 1, limit = 10, name, gender, department } = req.query;
+    const { page = 1, name, gender, department } = req.query;
+    const limit = 10;
     const offset = (page - 1) * limit;
     let where = {};
     if (name) Object.assign(where, { name });
     if (gender) Object.assign(where, { gender });
     if (department) Object.assign(where, { department });
-    let {count, rows} = await db.users.findAndCountAll({
-      offset,limit,where,
+    let { count, rows } = await db.users.findAndCountAll({
+      offset,
+      limit,
+      where,
       order: [
         ["star", "DESC"],
         ["Id", "ASC"],
@@ -86,3 +108,6 @@ const leaderBoard = async (req, res) => {
 };
 
 module.exports = { submitVideo, leaderBoard };
+
+//same day rewatch no stars
+//first 2 20 start, next 5 10 stars and next 3 1 star after that no stars in a day
