@@ -7,7 +7,7 @@ module.exports = {
       Id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        defaultValue: Math.random(),
+        autoIncrement: true,
         primaryKey: true,
       },
       title: { type: Sequelize.STRING(50), allowNull: false },

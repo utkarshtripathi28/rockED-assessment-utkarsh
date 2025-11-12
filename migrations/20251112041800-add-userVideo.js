@@ -7,7 +7,7 @@ module.exports = {
       Id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        defaultValue: Math.random(),
+        autoIncrement: true,
         primaryKey: true,
       },
       userId: {

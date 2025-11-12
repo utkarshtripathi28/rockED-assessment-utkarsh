@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
       Id: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: Math.random(),
+        autoIncrement: true,
         primaryKey: true,
       },
       gender: DataTypes.STRING(7),

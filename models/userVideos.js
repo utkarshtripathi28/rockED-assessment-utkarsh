@@ -1,26 +1,26 @@
 "use Strict";
 const { Model, DataTypes } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class videos extends Model {
+  class userVideos extends Model {
     static associate(models) {}
   }
-  videos.init(
+  userVideos.init(
     {
       Id: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: Math.random(),
+        autoIncrement: true,
         primaryKey: true,
       },
       userId: {
         type: DataTypes.INTEGER,
-        references: { model: "users", key: "Id" },
-        onDelete: "CASCADE",
+        // references: { model: "users", key: "Id" },
+        // onDelete: "CASCADE",
       },
       videoId: {
         type: DataTypes.INTEGER,
-        references: { model: "videos", key: "Id" },
-        onDelete: "CASCADE",
+        // references: { model: "videos", key: "Id" },
+        // onDelete: "CASCADE",
       },
       watchedAt: { type: DataTypes.DATE, defaultValue: Date.now() },
       createdAt: DataTypes.DATE,
@@ -28,14 +28,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "videos",
+      modelName: "userVideos",
       timestamps: true,
     }
   );
-  return videos;
+  return userVideos;
 };
-// id": "1",
-//       "title": "video 1",
-//       "description": "This is description of video 1",
-//       "url": "https://rocked.com/testVideo1.mp4",
-//       "publishDate": "2025-01-01"
